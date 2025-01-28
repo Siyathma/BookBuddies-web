@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, AlertLink } from "react-bootstrap";
 import "./LoginSignup.css"; // Import external styles
 
 const LoginSignup = () => {
@@ -20,25 +20,28 @@ const LoginSignup = () => {
     e.preventDefault();
     console.log(`${state} Function Executed`, formData);
     let endpoint = state === "Signup" ? "signup" : "login";
-    let responseData;
-    await fetch(`http://localhost:3001/${endpoint}`, {
-      method: "POST",
-      headers: {
-        Accepts: "application/form-data",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((data) => (responseData = data));
-
-    if (responseData.success) {
-      localStorage.setItem("auth-token", responseData.token);
-      window.location.replace("/");
-    } else {
-      alert(responseData.error);
+    try {
+        const response = await axios.post(`http://localhost:3000/${endpoint}`,formData)
+        console.log("Success", formData);
+        if(response.data.success){
+            alert("Signed up successfully!")
+        }else{
+            alert("Error singing up!");
+        }
+    } catch (error) {
+        console.log("Error signing up", error);
     }
+    resetForm();
+    
   };
+  
+  const resetForm = () => {
+    setUsername(""); 
+    setEmail("");
+    setNic("");
+    setGender("");
+    setPassword("");
+};
 
   return (
     <Container fluid className="loginsignup-container">
