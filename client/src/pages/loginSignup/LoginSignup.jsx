@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button, AlertLink } from "react-bootstrap";
+import axios from 'axios';
 import "./LoginSignup.css"; // Import external styles
 
 const LoginSignup = () => {
@@ -16,15 +17,27 @@ const LoginSignup = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const resetForm = () => {
+    setFormData({
+        username: "",
+        password: "",
+        email: "",
+        nic: "",
+        gender: "",
+      });
+};
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(`${state} Function Executed`, formData);
     let endpoint = state === "Signup" ? "signup" : "login";
     try {
-        const response = await axios.post(`http://localhost:3000/${endpoint}`,formData)
+        const response = await axios.post(`http://localhost:3001/${endpoint}`,formData)
         console.log("Success", formData);
         if(response.data.success){
-            alert("Signed up successfully!")
+            localStorage.setItem('auth-token',response.data.token);
+            alert("Signed up successfully!");
+            navigate('/');
         }else{
             alert("Error singing up!");
         }
@@ -35,13 +48,7 @@ const LoginSignup = () => {
     
   };
   
-  const resetForm = () => {
-    setUsername(""); 
-    setEmail("");
-    setNic("");
-    setGender("");
-    setPassword("");
-};
+
 
   return (
     <Container fluid className="loginsignup-container">
