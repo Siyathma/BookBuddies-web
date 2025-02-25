@@ -9,6 +9,7 @@ import router from './routes/routes.js';
 // const express = require("express");
 // const mongoose = require("mongoose");
 // const app = express();
+// const cors = require('cors');
 
 dotenv.config();
 
@@ -18,11 +19,12 @@ app.use(cors());
 app.use(express.json());
 
 //mongoDB configuration
-mongoose.connect(
-  "mongodb+srv://wedamullasiyathma:W2PD7xOTqfPStkaW@cluster0.ohhaq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0/bookbuddies"
-);
+mongoose.connect(process.env.MONGO_URL)
+  .then(() => console.log("MongoDB connected successfully"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
 app.use("/bookbuddies", router)
+
 //start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

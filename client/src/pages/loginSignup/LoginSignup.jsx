@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Container, Row, Col, Form, Button, AlertLink } from "react-bootstrap";
 import axios from 'axios';
 import "./LoginSignup.css"; // Import external styles
+import { useNavigate } from 'react-router-dom';
+
 
 const LoginSignup = () => {
   const [state, setState] = useState("Login");
@@ -12,7 +14,7 @@ const LoginSignup = () => {
     nic: "",
     gender: "",
   });
-
+const navigate = useNavigate(); //initialize useNavigate
   const changeHandler = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -31,8 +33,9 @@ const LoginSignup = () => {
     e.preventDefault();
     console.log(`${state} Function Executed`, formData);
     let endpoint = state === "Signup" ? "signup" : "login";
+    console.log(`POST request to: http://localhost:5000/${endpoint}`);
     try {
-        const response = await axios.post(`http://localhost:3001/${endpoint}`,formData)
+        const response = await axios.post(`http://localhost:5000/${endpoint}`,formData)
         console.log("Success", formData);
         if(response.data.success){
             localStorage.setItem('auth-token',response.data.token);
