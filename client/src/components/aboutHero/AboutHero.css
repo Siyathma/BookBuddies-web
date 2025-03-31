@@ -1,0 +1,27 @@
+/* Custom utility classes */
+.py-lg-7 {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+  
+  .mt-md-7 {
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+  }
+  
+  .blur-lg {
+    filter: blur(12px);
+  }
+  
+  /* Add hover effect for the button */
+  .position-relative:hover .blur-lg {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  
+  @media (min-width: 1200px) {
+    .position-relative:hover .blur-lg {
+      transform: scale(1.05);
+    }
+  }
+  

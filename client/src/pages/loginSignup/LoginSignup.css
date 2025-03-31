@@ -1,0 +1,57 @@
+/* Full-screen container */
+.loginsignup-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+/* Main content layout */
+.loginsignup-content {
+  width: 1000px;  /* Fixed width */
+  height:600px; /* Fixed height */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: stretch; /* Keep both sides the same height */
+}
+
+/* Form section */
+.loginsignup-form {
+  background: #ffffff;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 50%; /* Keep form section equal */
+}
+
+/* Image section */
+.loginsignup-image {
+  background: url('https://picsum.photos/1000') center/cover no-repeat;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  padding: 40px;
+}
+
+/* Toggle text styling */
+.toggle-text {
+  margin-top: 10px;
+}
+
+.toggle-text span {
+  color: green;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Submit button */
+.submit-button {
+  font-size: 18px;
+}

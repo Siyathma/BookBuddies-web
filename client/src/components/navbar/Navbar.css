@@ -1,0 +1,25 @@
+/* Navbar styles */
+.search-bar {
+  width: 50%; /* Adjust the width of the search bar as needed */
+  text-align: center;
+}
+
+.auth-buttons {
+  margin-left: auto;
+}
+
+.auth-buttons .btn {
+  margin-left: 10px; /* Add spacing between buttons */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .search-bar {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .auth-buttons {
+    text-align: right;
+  }
+}
