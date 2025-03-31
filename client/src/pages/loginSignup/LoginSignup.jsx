@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./LoginSignup.css";
@@ -13,16 +13,29 @@ const LoginSignup = ({ setIsAuthenticated }) => {
     nic: "",
     gender: "",
   });
-
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  
   const navigate = useNavigate();
-
+  
+  // Check if setIsAuthenticated is a function, if not, create a dummy function
+  const updateAuthState = typeof setIsAuthenticated === 'function' 
+    ? setIsAuthenticated 
+    : () => console.warn("setIsAuthenticated is not a function");
+  
   useEffect(() => {
+    // Check for existing token on component mount
     const token = localStorage.getItem("auth-token");
-    setIsAuthenticated(!!token);
-  }, [setIsAuthenticated]);
+    if (token) {
+      // Only call if it's a function
+      updateAuthState(true);
+    }
+  }, [updateAuthState]);
 
   const changeHandler = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    // Clear any errors when user starts typing
+    if (error) setError("");
   };
 
   const resetForm = () => {
@@ -37,37 +50,59 @@ const LoginSignup = ({ setIsAuthenticated }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setSuccess("");
+    
     const endpoint = state === "Signup" ? "signup" : "login";
-
+    
     try {
       const response = await axios.post(`http://localhost:3000/${endpoint}`, formData);
-
+      
       if (response.data.success) {
         if (response.data.token) {
           localStorage.setItem("auth-token", response.data.token);
-          setIsAuthenticated(true);
+          updateAuthState(true);
         }
-        alert(`${state} successful!`);
-        navigate("/");
-        window.location.reload(); // Reload page to update navbar
+        
+        setSuccess(`${state} successful!`);
+        
+        // Redirect after a short delay to show success message
+        setTimeout(() => {
+          navigate("/");
+          // Only reload if needed to update navbar state
+          if (window.location.pathname === "/") {
+            window.location.reload();
+          }
+        }, 1500);
       } else {
-        alert(response.data.error || `Error during ${state.toLowerCase()}`);
+        setError(response.data.error || `Error during ${state.toLowerCase()}`);
       }
     } catch (error) {
-      alert(error.response?.data?.error || `Error during ${state.toLowerCase()}`);
+      setError(error.response?.data?.error || `Error during ${state.toLowerCase()}`);
       console.error("Error:", error);
     }
+  };
+
+  const toggleState = () => {
+    setState(state === "Login" ? "Signup" : "Login");
+    resetForm();
+    setError("");
+    setSuccess("");
   };
 
   return (
     <Container fluid className="loginsignup-container">
       <Row className="loginsignup-content">
         <Col md={6} className="loginsignup-form">
-          <h1 className="text-center">{state}</h1>
+          <h1 className="text-center mb-4">{state}</h1>
+          
+          {error && <Alert variant="danger">{error}</Alert>}
+          {success && <Alert variant="success">{success}</Alert>}
+          
           <Form onSubmit={handleSubmit}>
             {state === "Signup" && (
               <>
-                <Form.Group controlId="formGridUsername">
+                <Form.Group className="mb-3" controlId="formGridUsername">
                   <Form.Label>Username</Form.Label>
                   <Form.Control
                     name="username"
@@ -77,8 +112,8 @@ const LoginSignup = ({ setIsAuthenticated }) => {
                     required
                   />
                 </Form.Group>
-
-                <Form.Group controlId="formGridNic">
+                
+                <Form.Group className="mb-3" controlId="formGridNic">
                   <Form.Label>NIC No.</Form.Label>
                   <Form.Control
                     name="nic"
@@ -88,8 +123,8 @@ const LoginSignup = ({ setIsAuthenticated }) => {
                     required
                   />
                 </Form.Group>
-
-                <Form.Group controlId="formGridGender">
+                
+                <Form.Group className="mb-3" controlId="formGridGender">
                   <Form.Label>Gender</Form.Label>
                   <Form.Select
                     name="gender"
@@ -105,8 +140,8 @@ const LoginSignup = ({ setIsAuthenticated }) => {
                 </Form.Group>
               </>
             )}
-
-            <Form.Group controlId="formGridEmail">
+            
+            <Form.Group className="mb-3" controlId="formGridEmail">
               <Form.Label>Email</Form.Label>
               <Form.Control
                 name="email"
@@ -117,8 +152,8 @@ const LoginSignup = ({ setIsAuthenticated }) => {
                 required
               />
             </Form.Group>
-
-            <Form.Group controlId="formGridPassword">
+            
+            <Form.Group className="mb-3" controlId="formGridPassword">
               <Form.Label>Password</Form.Label>
               <Form.Control
                 name="password"
@@ -129,30 +164,36 @@ const LoginSignup = ({ setIsAuthenticated }) => {
                 required
               />
             </Form.Group>
-
+            
             <p className="text-center toggle-text">
               {state === "Signup" ? (
                 <>
                   Already have an account?{" "}
-                  <span onClick={() => setState("Login")}>Login here</span>
+                  <span onClick={toggleState} className="toggle-link">Login here</span>
                 </>
               ) : (
                 <>
                   Create an account?{" "}
-                  <span onClick={() => setState("Signup")}>Click here</span>
+                  <span onClick={toggleState} className="toggle-link">Click here</span>
                 </>
               )}
             </p>
-
-            <Button variant="success" className="w-100 mt-3 submit-button" type="submit">
+            
+            <Button 
+              variant="success" 
+              className="w-100 mt-3 submit-button" 
+              type="submit"
+            >
               {state === "Signup" ? "Sign Up" : "Login"}
             </Button>
           </Form>
         </Col>
-
+        
         <Col md={6} className="loginsignup-image">
-          <h2>Start your journey now</h2>
-          <p>Join us to explore amazing features and experiences!</p>
+          <div className="image-content">
+            <h2>Start your journey now</h2>
+            <p>Join us to explore amazing features and experiences!</p>
+          </div>
         </Col>
       </Row>
     </Container>

@@ -1,57 +1,109 @@
-/* Full-screen container */
 .loginsignup-container {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
-  justify-content: center;
   align-items: center;
-
+  background-color: #f8f9fa;
 }
 
-/* Main content layout */
 .loginsignup-content {
-  width: 1000px;  /* Fixed width */
-  height:600px; /* Fixed height */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 15px;
   overflow: hidden;
-  display: flex;
-  align-items: stretch; /* Keep both sides the same height */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-/* Form section */
 .loginsignup-form {
-  background: #ffffff;
-  padding: 50px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 50%; /* Keep form section equal */
+  padding: 3rem;
 }
 
-/* Image section */
+.loginsignup-form h1 {
+  color: #2c3e50;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
 .loginsignup-image {
-  background: url('https://picsum.photos/1000') center/cover no-repeat;
-  width: 50%;
+  background-image: url('https://source.unsplash.com/random/1200x800/?books,library');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  min-height: 500px;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+}
+
+.loginsignup-image::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.image-content {
+  position: relative;
   color: white;
-  padding: 40px;
+  text-align: center;
+  padding: 2rem;
 }
 
-/* Toggle text styling */
+.image-content h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.image-content p {
+  font-size: 1.2rem;
+  max-width: 80%;
+  margin: 0 auto;
+}
+
 .toggle-text {
-  margin-top: 10px;
+  margin-top: 1.5rem;
+  color: #6c757d;
 }
 
-.toggle-text span {
-  color: green;
+.toggle-link {
+  color: #28a745;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 600;
+  text-decoration: underline;
 }
 
-/* Submit button */
+.toggle-link:hover {
+  color: #218838;
+}
+
 .submit-button {
-  font-size: 18px;
+  padding: 0.75rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s;
+}
+
+.submit-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .loginsignup-form {
+    padding: 2rem;
+  }
+  
+  .loginsignup-image {
+    min-height: 300px;
+  }
+  
+  .image-content h2 {
+    font-size: 2rem;
+  }
 }
